@@ -9,10 +9,8 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -26,11 +24,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameScreen implements Screen, Serializable {
     final Tank game;
+    static int flag = 0;
     final TankMovement Tanks;
     private Texture img2;
     private OrthographicCamera camera;
     private FitViewport viewport;
     private Stage stage2;
+    static TankMovement tankA;
     //private Rectangle dot;
     //private Texture whitedot;
     private Rectangle rectangle1;
@@ -41,11 +41,18 @@ public class GameScreen implements Screen, Serializable {
     private Texture health2;
     private Texture angle1;
     private Texture angle2;
+    private Texture Texture1;
+    private Texture Texture2;
     private ArrayList<Projectile> projectiles;
     private ArrayList<ReverseProjectile> reverseProjectiles;
-    public GameScreen(final Tank game){
+    private String tankName;
+    public GameScreen(final Tank game, String tankName, TankMovement tank1){
         this.game = game;
-        Tanks = new TankMovement();
+        this.tankName = tankName;
+        Tanks = tank1;
+        tankA = Tanks;
+        Texture1 = new Texture(tankName);
+        Texture2 = new Texture("FrostReversed.png");
         rectangle1 = new Rectangle();
         rectangle2 = new Rectangle();
         rectangle3 = new Rectangle();
@@ -169,12 +176,22 @@ public class GameScreen implements Screen, Serializable {
         if(!projectiles.isEmpty() && projectiles.get(0).getX() < (Tanks.Tank2.getX()+Tanks.Tank2.width) && projectiles.get(0).getY() < (Tanks.Tank2.getY()+Tanks.Tank2.height)){
             if(Tanks.Tank2.getX() < projectiles.get(0).getX() && Tanks.Tank2.getY() < projectiles.get(0).getY()){
                 rectangle2.width -= 2;
+                if(rectangle2.width<=0){
+                    String msg1 = "Player1 Wins !!";
+                    game.setScreen(new GameOver(game,msg1));
+                    dispose();
+                }
             }
         }
 
         if(!reverseProjectiles.isEmpty() && reverseProjectiles.get(0).getX() < (Tanks.Tank1.getX()+Tanks.Tank1.width) && reverseProjectiles.get(0).getY() < (Tanks.Tank1.getY()+Tanks.Tank1.height)){
             if(Tanks.Tank1.getX() < reverseProjectiles.get(0).getX() && Tanks.Tank1.getY() < reverseProjectiles.get(0).getY()){
                 rectangle1.width -= 2;
+                if(rectangle1.width<=0) {
+                    String msg2 = "Player2 Wins !!";
+                    game.setScreen(new GameOver(game,msg2));
+                    dispose();
+                }
             }
         }
 
@@ -232,22 +249,10 @@ public class GameScreen implements Screen, Serializable {
 
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if(Tanks.Tank1.x<200) {
-                Tanks.Tank1.x -= 200 * Gdx.graphics.getDeltaTime();
-                Tanks.Tank1.y -= 200 * Gdx.graphics.getDeltaTime();
-            }
-            else{
-                Tanks.Tank1.x -= 200 * Gdx.graphics.getDeltaTime();
-            }
+            Tanks.Tank1.x -= 200 * Gdx.graphics.getDeltaTime();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if(Tanks.Tank1.x<200) {
-                Tanks.Tank1.x += 200 * Gdx.graphics.getDeltaTime();
-                Tanks.Tank1.y += 200 * Gdx.graphics.getDeltaTime();
-            }
-            else{
-                Tanks.Tank1.x += 200 * Gdx.graphics.getDeltaTime();
-            }
+            Tanks.Tank1.x += 200 * Gdx.graphics.getDeltaTime();
         }
         if (Tanks.Tank1.x < 0)
             Tanks.Tank1.x = 0;
@@ -270,8 +275,8 @@ public class GameScreen implements Screen, Serializable {
         game.getBatch().setProjectionMatrix(camera.combined);
         game.getBatch().begin();
         game.getBatch().draw(img2, 0, -80,660,560);
-        game.getBatch().draw(Tanks.Tank1Image, Tanks.Tank1.x, Tanks.Tank1.y, Tanks.Tank1.width, Tanks.Tank1.height);
-        game.getBatch().draw(Tanks.Tank2Image, Tanks.Tank2.x, Tanks.Tank2.y, Tanks.Tank2.width, Tanks.Tank2.height);
+        game.getBatch().draw(Texture1, Tanks.Tank1.x, Tanks.Tank1.y, Tanks.Tank1.width, Tanks.Tank1.height);
+        game.getBatch().draw(Texture2, Tanks.Tank2.x, Tanks.Tank2.y, Tanks.Tank2.width, Tanks.Tank2.height);
         game.getBatch().draw(health1, rectangle1.x, rectangle1.y, rectangle1.width, rectangle1.height);
         game.getBatch().draw(health2, rectangle2.x, rectangle2.y, rectangle2.width, rectangle2.height);
         game.getBatch().draw(angle1, rectangle3.x, rectangle3.y, rectangle3.width, rectangle3.height);

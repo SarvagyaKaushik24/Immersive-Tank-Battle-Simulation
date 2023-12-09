@@ -68,6 +68,19 @@ public class MainMenu implements Screen, Serializable {
         Button button2 = new TextButton("Resume Game",mySkin);
         button2.setSize(250,70);
         button2.setPosition(195,180);
+        button2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //ScreenUtils.clear(0, 0, 0, 0);
+                if(GameScreen.flag==1) {
+                    game.setScreen(new GameScreen(game, "Abrams.png", GameScreen.tankA));
+                    dispose();
+                }
+                else{
+                    System.out.println("No Saved Game");;
+                }
+            }
+        });
         Button button3 = new TextButton("Exit Game",mySkin);
         button3.setSize(250,70);
         button3.setPosition(195,110);

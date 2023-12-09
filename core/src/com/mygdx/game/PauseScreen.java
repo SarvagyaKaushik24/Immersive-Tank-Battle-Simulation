@@ -2,6 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,13 +42,37 @@ public class PauseScreen implements Screen,Serializable{
         ResumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                GameScreen.flag = 1;
+                game.setScreen(new GameScreen(game,"Abrams.png", GameScreen.tankA));
                 dispose();
             }
         });
         Button SaveGameButton = new TextButton("Save Game",mySkin);
         SaveGameButton.setSize(250,70);
         SaveGameButton.setPosition(195,200);
+        SaveGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try{
+                    GameScreen.flag = 1;
+                    File f = new File("save.txt");
+                    FileOutputStream fos = new FileOutputStream(f);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    oos.writeObject(GameScreen.tankA);
+
+                    FileInputStream fis = new FileInputStream(f);
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    TankMovement Tanks1 = (TankMovement) ois.readObject();
+                    game.setScreen(new GameScreen(game , "Abrams.png",Tanks1));
+
+
+                }
+                catch (Exception e){
+                    System.out.println("Job Done");
+                }
+
+            }
+        });
         Button QuitGameButton = new TextButton("Quit Game",mySkin);
         QuitGameButton.setSize(250,70);
         QuitGameButton.setPosition(195,100);

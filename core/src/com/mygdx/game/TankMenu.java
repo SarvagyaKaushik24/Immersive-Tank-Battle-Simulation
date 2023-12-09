@@ -42,7 +42,7 @@ public class TankMenu implements Screen, Serializable {
         BuratinoButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game,"Buratino.png", new TankMovement()));
                 dispose();
             }
         });
@@ -53,7 +53,7 @@ public class TankMenu implements Screen, Serializable {
         FrostButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game,"Frost.png", new TankMovement()));
                 dispose();
             }
         });
@@ -64,7 +64,7 @@ public class TankMenu implements Screen, Serializable {
         AbramsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new GameScreen(game, "Abrams.png", new TankMovement()));
                 dispose();
             }
         });

@@ -16,8 +16,10 @@ public class TankMovement extends Sprite {
     private float speed;
 
     public TankMovement(){
-        Tank1Image = new Texture(Gdx.files.internal("Abrams.png"));
-        Tank2Image = new Texture(Gdx.files.internal("FrostReversed.png"));
+        try {
+            Tank1Image = new Texture(Gdx.files.internal("Abrams.png"));
+            Tank2Image = new Texture(Gdx.files.internal("FrostReversed.png"));
+        }catch (Exception e){}
         velocity1 = new Vector2();
         speed = 50;
         Tank1 = new Rectangle();
@@ -29,7 +31,7 @@ public class TankMovement extends Sprite {
         Tank1.height = 64;
 
         Tank2.x = 580;
-        Tank2.y = 60;
+        Tank2.y = 55;
         Tank2.width = 64;
         Tank2.height = 64;
     }
